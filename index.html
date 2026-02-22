@@ -1,0 +1,2843 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>📚 Education Toppers Hub - Attendance System 2026</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --success: #4cc9f0;
+            --danger: #f72585;
+            --warning: #f8961e;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --present: #28a745;
+            --absent: #dc3545;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 15px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Header Styles */
+        .header {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            text-align: center;
+            animation: slideDown 0.5s ease;
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .header h1 {
+            color: var(--dark);
+            font-size: clamp(24px, 6vw, 32px);
+            margin-bottom: 5px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header p {
+            color: var(--gray);
+            font-size: clamp(14px, 4vw, 16px);
+        }
+
+        /* Login Container */
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 70vh;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .login-box {
+            background: white;
+            padding: clamp(30px, 6vw, 50px);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 450px;
+            transform: scale(1);
+            transition: transform 0.3s ease;
+        }
+
+        .login-box:hover {
+            transform: scale(1.02);
+        }
+
+        .login-box h2 {
+            color: var(--dark);
+            margin-bottom: 30px;
+            text-align: center;
+            font-size: clamp(22px, 5vw, 26px);
+        }
+
+        /* Role Selector */
+        .role-selector {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .role-btn {
+            padding: 12px 5px;
+            border: 2px solid #e0e0e0;
+            background: white;
+            cursor: pointer;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: clamp(12px, 4vw, 14px);
+            transition: all 0.3s;
+        }
+
+        .role-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.2);
+        }
+
+        .role-btn.active {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-color: transparent;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 20px;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(10px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--dark);
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 15px;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+        }
+
+        /* Buttons */
+        .btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 14px 20px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            width: 100%;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-bottom: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s;
+        }
+
+        .btn:active::after {
+            width: 200px;
+            height: 200px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--gray);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+        }
+
+        .btn-success {
+            background: var(--success);
+        }
+
+        .btn-warning {
+            background: var(--warning);
+            color: white;
+        }
+
+        .btn-sm {
+            padding: 8px 12px;
+            font-size: 13px;
+            width: auto;
+        }
+
+        /* Dashboard */
+        .dashboard {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            animation: slideUp 0.5s ease;
+        }
+
+        .dashboard-header {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #eee;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .dashboard-header h2 {
+            color: var(--dark);
+            font-size: clamp(18px, 5vw, 22px);
+            animation: slideRight 0.3s ease;
+        }
+
+        @keyframes slideRight {
+            from { transform: translateX(-20px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .logout-btn {
+            background: var(--danger);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .logout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(247, 37, 133, 0.3);
+        }
+
+        /* Profile Section */
+        .profile-section {
+            display: flex;
+            flex-direction: row;
+            gap: 20px;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 15px;
+            flex-wrap: wrap;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(67, 97, 238, 0.2); }
+            70% { box-shadow: 0 0 0 10px rgba(67, 97, 238, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(67, 97, 238, 0); }
+        }
+
+        .profile-photo {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 3px solid var(--primary);
+            transition: transform 0.3s;
+        }
+
+        .profile-photo:hover {
+            transform: scale(1.1);
+        }
+
+        .profile-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-info {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .profile-info h3 {
+            color: var(--dark);
+            margin-bottom: 10px;
+            font-size: clamp(16px, 4vw, 18px);
+        }
+
+        .profile-info p {
+            color: var(--gray);
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        .photo-upload {
+            margin-top: 15px;
+        }
+
+        .photo-upload input {
+            display: none;
+        }
+
+        .photo-upload label {
+            background: var(--primary);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: inline-block;
+            font-size: 13px;
+            transition: all 0.3s;
+        }
+
+        .photo-upload label:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+        }
+
+        /* Stats Container */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            animation: slideUp 0.3s ease;
+            transition: transform 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .stat-card h4 {
+            font-size: 14px;
+            margin-bottom: 10px;
+            opacity: 0.9;
+        }
+
+        .stat-card .stat-value {
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        /* Year and Month Selector */
+        .year-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .year-btn {
+            padding: 10px 20px;
+            border: 2px solid var(--primary);
+            background: white;
+            color: var(--primary);
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .year-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.2);
+        }
+
+        .year-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .month-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            gap: 8px;
+            margin-bottom: 25px;
+        }
+
+        .month-btn {
+            padding: 10px 5px;
+            border: 2px solid var(--primary);
+            background: white;
+            color: var(--primary);
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: clamp(11px, 3vw, 13px);
+            transition: all 0.3s;
+        }
+
+        .month-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.2);
+        }
+
+        .month-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .month-btn.small {
+            padding: 5px;
+            font-size: 11px;
+        }
+
+        /* Calendar View */
+        .calendar-container {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            border: 1px solid #eee;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .calendar-header {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+            margin-bottom: 10px;
+            text-align: center;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #eee;
+            border-radius: 5px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            padding: 5px;
+        }
+
+        .calendar-day:hover {
+            transform: scale(1.05);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .calendar-day.empty {
+            background: #f9f9f9;
+            cursor: default;
+        }
+
+        .calendar-day.present {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            border-color: #28a745;
+        }
+
+        .calendar-day.absent {
+            background: linear-gradient(135deg, #dc3545, #c82333);
+            color: white;
+            border-color: #dc3545;
+        }
+
+        .calendar-day .date {
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .calendar-day .status-icon {
+            font-size: 16px;
+            margin-top: 2px;
+        }
+
+        /* Tables */
+        .table-container {
+            overflow-x: auto;
+            margin-top: 20px;
+            border-radius: 10px;
+            border: 1px solid #eee;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .attendance-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 600px;
+        }
+
+        .attendance-table th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .attendance-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+            font-size: 14px;
+        }
+
+        .attendance-table tr {
+            transition: background 0.3s;
+        }
+
+        .attendance-table tr:hover {
+            background: #f5f5f5;
+        }
+
+        /* Badges */
+        .present-badge {
+            background: #28a745;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-size: 12px;
+            display: inline-block;
+            animation: bounce 1s ease;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .absent-badge {
+            background: var(--danger);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-size: 12px;
+            display: inline-block;
+        }
+
+        .blocked-badge {
+            background: var(--dark);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-size: 12px;
+            display: inline-block;
+        }
+
+        /* Progress Bar */
+        .percentage-bar {
+            width: 100%;
+            height: 8px;
+            background: #eee;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .percentage-fill {
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            transition: width 0.3s;
+        }
+
+        .percentage-text {
+            margin-top: 5px;
+            font-size: 12px;
+            color: var(--gray);
+        }
+
+        /* Admin Panel */
+        .admin-panel {
+            display: grid;
+            grid-template-columns: 220px 1fr;
+            gap: 20px;
+        }
+
+        .admin-sidebar {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            animation: slideLeft 0.3s ease;
+        }
+
+        @keyframes slideLeft {
+            from { transform: translateX(-20px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .admin-sidebar button {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 5px;
+            border: none;
+            background: white;
+            cursor: pointer;
+            text-align: left;
+            border-radius: 5px;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .admin-sidebar button:hover {
+            transform: translateX(5px);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .admin-sidebar button.active {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .admin-content {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            animation: slideRight 0.3s ease;
+        }
+
+        /* Filters */
+        .filters {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filters select,
+        .filters input {
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            min-width: 150px;
+            flex: 1;
+            transition: all 0.3s;
+        }
+
+        .filters select:focus,
+        .filters input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+
+        .edit-btn,
+        .delete-btn,
+        .block-btn,
+        .unblock-btn,
+        .view-btn,
+        .email-btn,
+        .password-btn {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 12px;
+            color: white;
+            transition: all 0.3s;
+        }
+
+        .edit-btn:hover,
+        .delete-btn:hover,
+        .block-btn:hover,
+        .unblock-btn:hover,
+        .view-btn:hover,
+        .email-btn:hover,
+        .password-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+        }
+
+        .edit-btn { background: var(--warning); }
+        .delete-btn { background: var(--danger); }
+        .block-btn { background: var(--dark); }
+        .unblock-btn { background: var(--success); }
+        .view-btn { background: var(--primary); }
+        .email-btn { background: #17a2b8; }
+        .password-btn { background: #6f42c1; }
+
+        /* Detail View */
+        .detail-view {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .detail-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 800px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s ease;
+        }
+
+        .close-btn {
+            float: right;
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .close-btn:hover {
+            transform: scale(1.1);
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .admin-panel {
+                grid-template-columns: 1fr;
+            }
+            
+            .admin-sidebar {
+                display: flex;
+                overflow-x: auto;
+                gap: 5px;
+                padding: 10px;
+            }
+            
+            .admin-sidebar button {
+                width: auto;
+                white-space: nowrap;
+            }
+            
+            .profile-section {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            
+            .filters {
+                flex-direction: column;
+            }
+            
+            .filters select,
+            .filters input {
+                width: 100%;
+            }
+            
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .month-selector {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .calendar-day {
+                font-size: 10px;
+            }
+            
+            .calendar-day .date {
+                font-size: 12px;
+            }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--primary);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            color: var(--dark);
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            z-index: 2000;
+            animation: slideInRight 0.3s ease;
+            border-left: 4px solid var(--primary);
+        }
+
+        .toast.success { border-left-color: var(--present); }
+        .toast.error { border-left-color: var(--danger); }
+        .toast.warning { border-left-color: var(--warning); }
+
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* Summary Cards */
+        .summary-card {
+            background: white;
+            border: 1px solid #eee;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            animation: slideUp 0.3s ease;
+        }
+
+        .summary-card h4 {
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .summary-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            text-align: center;
+        }
+
+        .summary-stat {
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            transition: transform 0.3s;
+        }
+
+        .summary-stat:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+        }
+
+        .summary-stat .label {
+            font-size: 12px;
+            color: var(--gray);
+        }
+
+        .summary-stat .value {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--dark);
+        }
+
+        /* Welcome Message */
+        .welcome-message {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            animation: pulse 2s infinite;
+        }
+
+        .welcome-message h3 {
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+
+        .welcome-message p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        /* Session Info */
+        .session-info {
+            background: #e8f4fd;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            animation: slideUp 0.3s ease;
+        }
+
+        .session-info span {
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        /* Edit Form */
+        .edit-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .edit-field {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .edit-field label {
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .edit-field input {
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .edit-field input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .edit-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+
+        /* Tooltip */
+        [data-tooltip] {
+            position: relative;
+            cursor: pointer;
+        }
+
+        [data-tooltip]:before {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 5px 10px;
+            background: var(--dark);
+            color: white;
+            font-size: 12px;
+            border-radius: 4px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+            pointer-events: none;
+        }
+
+        [data-tooltip]:hover:before {
+            opacity: 1;
+            visibility: visible;
+            bottom: 120%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📚 Education Toppers Hub</h1>
+            <p>Attendance Management System 2026 | Class 6 to 12</p>
+        </div>
+
+        <!-- Toast Notification -->
+        <div id="toast" class="toast hidden"></div>
+
+        <!-- Login Section -->
+        <div id="loginSection" class="login-container">
+            <div class="login-box">
+                <h2>Welcome Back! 👋</h2>
+                
+                <div class="role-selector">
+                    <button class="role-btn active" onclick="setRole('student')">Student</button>
+                    <button class="role-btn" onclick="setRole('teacher')">Teacher</button>
+                    <button class="role-btn" onclick="setRole('admin')">Admin</button>
+                </div>
+
+                <div id="loginForm">
+                    <div class="form-group">
+                        <label>📧 Email Address</label>
+                        <input type="email" id="email" placeholder="Enter your email" value="">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>🔒 Password</label>
+                        <input type="password" id="password" placeholder="Enter your password" value="">
+                    </div>
+
+                    <div id="studentTeacherFields" class="hidden">
+                        <button class="btn btn-secondary" onclick="showSignUpForm()" id="showSignUpBtn">Create New Account</button>
+                    </div>
+
+                    <button class="btn" onclick="handleLogin()" id="loginBtn">Login</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sign Up Modal (Only for Students/Teachers) -->
+        <div id="signupModal" class="detail-view hidden">
+            <div class="detail-content" style="max-width: 500px;">
+                <button class="close-btn" onclick="closeSignUpModal()">✖</button>
+                <h3 style="margin-bottom: 20px;">📝 Create New Account</h3>
+                
+                <div class="form-group">
+                    <label>👤 Full Name</label>
+                    <input type="text" id="signupFullName" placeholder="Enter your full name">
+                </div>
+                
+                <div class="form-group">
+                    <label>📧 Email</label>
+                    <input type="email" id="signupEmail" placeholder="Enter your email">
+                </div>
+                
+                <div class="form-group">
+                    <label>🔒 Password</label>
+                    <input type="password" id="signupPassword" placeholder="Enter your password">
+                </div>
+                
+                <div class="form-group">
+                    <label>📚 Select Class</label>
+                    <select id="signupClass">
+                        <option value="">Select Class</option>
+                        <option value="6">Class 6</option>
+                        <option value="7">Class 7</option>
+                        <option value="8">Class 8</option>
+                        <option value="9">Class 9</option>
+                        <option value="10">Class 10</option>
+                        <option value="11">Class 11</option>
+                        <option value="12">Class 12</option>
+                    </select>
+                </div>
+                
+                <button class="btn" onclick="handleSignUp()">Create Account</button>
+            </div>
+        </div>
+
+        <!-- Edit User Modal -->
+        <div id="editUserModal" class="detail-view hidden">
+            <div class="detail-content" style="max-width: 500px;">
+                <button class="close-btn" onclick="closeEditModal()">✖</button>
+                <h3 style="margin-bottom: 20px;">✏️ Edit User Details</h3>
+                
+                <div class="edit-form">
+                    <div class="edit-field">
+                        <label>👤 Full Name</label>
+                        <input type="text" id="editName" placeholder="Enter full name">
+                    </div>
+                    
+                    <div class="edit-field">
+                        <label>📧 Email</label>
+                        <input type="email" id="editEmail" placeholder="Enter email">
+                    </div>
+                    
+                    <div class="edit-field">
+                        <label>🔒 Password</label>
+                        <input type="text" id="editPassword" placeholder="Enter new password">
+                        <small style="color: var(--gray);">Leave blank to keep current password</small>
+                    </div>
+                    
+                    <div class="edit-field">
+                        <label>📚 Class</label>
+                        <select id="editClass">
+                            <option value="6">Class 6</option>
+                            <option value="7">Class 7</option>
+                            <option value="8">Class 8</option>
+                            <option value="9">Class 9</option>
+                            <option value="10">Class 10</option>
+                            <option value="11">Class 11</option>
+                            <option value="12">Class 12</option>
+                        </select>
+                    </div>
+                    
+                    <div class="edit-actions">
+                        <button class="btn-success btn-sm" onclick="saveUserEdit()">💾 Save Changes</button>
+                        <button class="btn-danger btn-sm" onclick="closeEditModal()">❌ Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Student Dashboard -->
+        <div id="studentDashboard" class="dashboard hidden">
+            <div class="dashboard-header">
+                <h2>🎓 Student Dashboard - Education Toppers Hub</h2>
+                <button class="logout-btn" onclick="logout()">Logout</button>
+            </div>
+            
+            <div class="session-info" id="studentSessionInfo"></div>
+            
+            <div class="profile-section" id="studentProfile"></div>
+            
+            <div class="stats-container" id="studentStats"></div>
+            
+            <div class="year-selector">
+                <button class="year-btn active" onclick="changeYear('student', 2026)">2026</button>
+                <button class="year-btn" onclick="changeYear('student', 2025)">2025</button>
+            </div>
+            
+            <div class="month-selector" id="studentMonthSelector"></div>
+            
+            <div id="studentCalendar" class="calendar-container"></div>
+            
+            <h3>📊 Monthly Summary</h3>
+            <div id="studentMonthlySummary"></div>
+        </div>
+
+        <!-- Teacher Dashboard -->
+        <div id="teacherDashboard" class="dashboard hidden">
+            <div class="dashboard-header">
+                <h2>👨‍🏫 Teacher Dashboard - Education Toppers Hub</h2>
+                <button class="logout-btn" onclick="logout()">Logout</button>
+            </div>
+            
+            <div class="session-info" id="teacherSessionInfo"></div>
+            
+            <div class="profile-section" id="teacherProfile"></div>
+            
+            <div class="stats-container" id="teacherStats"></div>
+            
+            <div class="year-selector">
+                <button class="year-btn active" onclick="changeYear('teacher', 2026)">2026</button>
+                <button class="year-btn" onclick="changeYear('teacher', 2025)">2025</button>
+            </div>
+            
+            <div class="month-selector" id="teacherMonthSelector"></div>
+            
+            <div id="teacherCalendar" class="calendar-container"></div>
+            
+            <h3>📊 Monthly Summary</h3>
+            <div id="teacherMonthlySummary"></div>
+        </div>
+
+        <!-- Admin Dashboard -->
+        <div id="adminDashboard" class="dashboard hidden">
+            <div class="dashboard-header">
+                <h2>👑 Admin Dashboard - Education Toppers Hub</h2>
+                <button class="logout-btn" onclick="logout()">Logout</button>
+            </div>
+
+            <div class="session-info" id="adminSessionInfo"></div>
+
+            <div class="admin-panel">
+                <div class="admin-sidebar">
+                    <button class="active" onclick="showAdminSection('students')">👥 Manage Students</button>
+                    <button onclick="showAdminSection('teachers')">👨‍🏫 Manage Teachers</button>
+                    <button onclick="showAdminSection('attendance')">📅 Mark Attendance</button>
+                    <button onclick="showAdminSection('calendar')">📆 Calendar View</button>
+                    <button onclick="showAdminSection('reports')">📊 Monthly Reports</button>
+                    <button onclick="showAdminSection('blocked')">🚫 Blocked Users</button>
+                </div>
+
+                <div class="admin-content" id="adminContent">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Detail View Modal -->
+    <div id="detailModal" class="detail-view hidden">
+        <div class="detail-content">
+            <button class="close-btn" onclick="closeModal()">✖ Close</button>
+            <div id="modalContent"></div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
+        import { getDatabase, ref, set, get, push, update, remove } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js";
+        
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCzCp_EGGmSolCSy8iQNrQAE-vGO8vTKIo",
+            authDomain: "education-toppers-hub-4d045.firebaseapp.com",
+            databaseURL: "https://education-toppers-hub-4d045-default-rtdb.firebaseio.com",
+            projectId: "education-toppers-hub-4d045",
+            storageBucket: "education-toppers-hub-4d045.firebasestorage.app",
+            messagingSenderId: "1065320525597",
+            appId: "1:1065320525597:web:ca166ff0d6e257492f3bf4"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        // Global Variables
+        let currentRole = 'student';
+        let currentUser = null;
+        let currentYear = 2026;
+        let currentMonth = new Date().getMonth();
+        let editingUserId = null;
+
+        // Admin credentials
+        const ADMIN_EMAIL = "ethwemaketoppers@gmail.com";
+        const ADMIN_PASSWORD = "vidhan kumar";
+
+        // Months array
+        const months = [
+            'January', 'February', 'March', 'April', 'May', 'June',
+            'July', 'August', 'September', 'October', 'November', 'December'
+        ];
+
+        // Toast notification function
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = `toast ${type}`;
+            toast.classList.remove('hidden');
+            
+            setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 3000);
+        }
+
+        // Check for saved session on page load
+        window.addEventListener('load', () => {
+            const savedUser = localStorage.getItem('educationToppersUser');
+            if (savedUser) {
+                try {
+                    currentUser = JSON.parse(savedUser);
+                    if (currentUser.role === 'admin') {
+                        showDashboard('admin');
+                    } else if (currentUser.role === 'student') {
+                        showDashboard('student');
+                    } else if (currentUser.role === 'teacher') {
+                        showDashboard('teacher');
+                    }
+                } catch (e) {
+                    localStorage.removeItem('educationToppersUser');
+                }
+            }
+        });
+
+        // Set role
+        window.setRole = (role) => {
+            currentRole = role;
+            document.querySelectorAll('.role-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Show/hide student/teacher fields
+            const studentTeacherFields = document.getElementById('studentTeacherFields');
+            if (role === 'admin') {
+                studentTeacherFields.classList.add('hidden');
+                document.getElementById('email').value = '';
+                document.getElementById('password').value = '';
+            } else {
+                studentTeacherFields.classList.remove('hidden');
+            }
+        };
+
+        // Show sign up form
+        window.showSignUpForm = () => {
+            document.getElementById('signupModal').classList.remove('hidden');
+        };
+
+        // Close sign up modal
+        window.closeSignUpModal = () => {
+            document.getElementById('signupModal').classList.add('hidden');
+            // Clear sign up form
+            document.getElementById('signupFullName').value = '';
+            document.getElementById('signupEmail').value = '';
+            document.getElementById('signupPassword').value = '';
+            document.getElementById('signupClass').value = '';
+        };
+
+        // Handle sign up
+        window.handleSignUp = async () => {
+            const fullName = document.getElementById('signupFullName').value;
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+            const className = document.getElementById('signupClass').value;
+            
+            if (!fullName || !email || !password || !className) {
+                showToast('Please fill all fields', 'error');
+                return;
+            }
+
+            const usersRef = ref(database, 'users');
+            const snapshot = await get(usersRef);
+            
+            if (snapshot.exists()) {
+                const users = snapshot.val();
+                for (let id in users) {
+                    if (users[id].email === email) {
+                        showToast('Email already exists', 'error');
+                        return;
+                    }
+                }
+            }
+
+            const newUserRef = push(usersRef);
+            const userId = newUserRef.key;
+            
+            const userData = {
+                email,
+                password,
+                fullName,
+                class: className,
+                role: currentRole,
+                photo: '',
+                blocked: false,
+                createdAt: new Date().toISOString()
+            };
+            
+            await set(newUserRef, userData);
+            
+            // Initialize attendance structure for 2026
+            const attendanceRef = ref(database, `attendance/${currentRole}s/${userId}`);
+            await set(attendanceRef, {
+                years: {
+                    '2026': {
+                        monthly: {}
+                    },
+                    '2025': {
+                        monthly: {}
+                    }
+                },
+                totalDays: 0,
+                presentDays: 0,
+                percentage: 0
+            });
+            
+            showToast('Account created successfully! Please login.', 'success');
+            closeSignUpModal();
+        };
+
+        // Handle login
+        window.handleLogin = async () => {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            if (!email || !password) {
+                showToast('Please fill all fields', 'error');
+                return;
+            }
+
+            if (currentRole === 'admin') {
+                if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
+                    currentUser = { 
+                        email, 
+                        role: 'admin',
+                        fullName: 'Administrator',
+                        loginTime: new Date().toISOString()
+                    };
+                    // Save to localStorage
+                    localStorage.setItem('educationToppersUser', JSON.stringify(currentUser));
+                    showToast('Login successful!', 'success');
+                    showDashboard('admin');
+                } else {
+                    showToast('Invalid admin credentials', 'error');
+                }
+                return;
+            }
+
+            // Student/Teacher login
+            const usersRef = ref(database, 'users');
+            const snapshot = await get(usersRef);
+            
+            if (snapshot.exists()) {
+                const users = snapshot.val();
+                for (let id in users) {
+                    if (users[id].email === email && users[id].password === password && users[id].role === currentRole) {
+                        if (users[id].blocked) {
+                            showToast('Your account has been blocked. Please contact admin.', 'error');
+                            return;
+                        }
+                        currentUser = { id, ...users[id] };
+                        // Save to localStorage
+                        localStorage.setItem('educationToppersUser', JSON.stringify(currentUser));
+                        showToast('Login successful!', 'success');
+                        showDashboard(currentRole);
+                        return;
+                    }
+                }
+            }
+            showToast('Invalid credentials', 'error');
+        };
+
+        // Show dashboard
+        window.showDashboard = (role) => {
+            document.getElementById('loginSection').classList.add('hidden');
+            document.getElementById('studentDashboard').classList.add('hidden');
+            document.getElementById('teacherDashboard').classList.add('hidden');
+            document.getElementById('adminDashboard').classList.add('hidden');
+            
+            // Update session info
+            const loginTime = new Date(currentUser.loginTime || Date.now()).toLocaleString();
+            
+            if (role === 'student') {
+                document.getElementById('studentDashboard').classList.remove('hidden');
+                document.getElementById('studentSessionInfo').innerHTML = `
+                    <span>👋 Welcome, ${currentUser.fullName}</span>
+                    <span>📅 Last Login: ${loginTime}</span>
+                `;
+                loadStudentDashboard();
+            } else if (role === 'teacher') {
+                document.getElementById('teacherDashboard').classList.remove('hidden');
+                document.getElementById('teacherSessionInfo').innerHTML = `
+                    <span>👋 Welcome, ${currentUser.fullName}</span>
+                    <span>📅 Last Login: ${loginTime}</span>
+                `;
+                loadTeacherDashboard();
+            } else if (role === 'admin') {
+                document.getElementById('adminDashboard').classList.remove('hidden');
+                document.getElementById('adminSessionInfo').innerHTML = `
+                    <span>👋 Welcome, Admin</span>
+                    <span>📅 Login Time: ${loginTime}</span>
+                `;
+                showAdminSection('students');
+            }
+        };
+
+        // Change year
+        window.changeYear = async (role, year) => {
+            currentYear = year;
+            document.querySelectorAll('.year-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            if (role === 'student') {
+                await loadStudentDashboard();
+            } else if (role === 'teacher') {
+                await loadTeacherDashboard();
+            }
+        };
+
+        // Load student dashboard
+        async function loadStudentDashboard() {
+            const profileDiv = document.getElementById('studentProfile');
+            const statsDiv = document.getElementById('studentStats');
+            const monthSelector = document.getElementById('studentMonthSelector');
+            const calendarDiv = document.getElementById('studentCalendar');
+            const summaryDiv = document.getElementById('studentMonthlySummary');
+            
+            // Load profile
+            profileDiv.innerHTML = `
+                <div class="profile-photo">
+                    ${currentUser.photo ? 
+                        `<img src="${currentUser.photo}" alt="Profile">` : 
+                        '<div style="background:#ddd; width:100%; height:100%; display:flex; align-items:center; justify-content:center;">📷</div>'
+                    }
+                </div>
+                <div class="profile-info">
+                    <h3>${currentUser.fullName}</h3>
+                    <p>📧 ${currentUser.email}</p>
+                    <p>📚 Class ${currentUser.class}</p>
+                    <p>🎓 Student - Education Toppers Hub</p>
+                    <div class="photo-upload">
+                        <input type="file" id="studentPhotoInput" accept="image/*" onchange="uploadPhoto('student')">
+                        <label for="studentPhotoInput">📸 Upload Photo</label>
+                    </div>
+                </div>
+            `;
+            
+            // Load attendance data
+            await loadUserAttendance('student', currentUser.id, statsDiv, monthSelector, calendarDiv, summaryDiv);
+        }
+
+        // Load teacher dashboard
+        async function loadTeacherDashboard() {
+            const profileDiv = document.getElementById('teacherProfile');
+            const statsDiv = document.getElementById('teacherStats');
+            const monthSelector = document.getElementById('teacherMonthSelector');
+            const calendarDiv = document.getElementById('teacherCalendar');
+            const summaryDiv = document.getElementById('teacherMonthlySummary');
+            
+            profileDiv.innerHTML = `
+                <div class="profile-photo">
+                    ${currentUser.photo ? 
+                        `<img src="${currentUser.photo}" alt="Profile">` : 
+                        '<div style="background:#ddd; width:100%; height:100%; display:flex; align-items:center; justify-content:center;">📷</div>'
+                    }
+                </div>
+                <div class="profile-info">
+                    <h3>${currentUser.fullName}</h3>
+                    <p>📧 ${currentUser.email}</p>
+                    <p>📚 Class ${currentUser.class}</p>
+                    <p>👨‍🏫 Teacher - Education Toppers Hub</p>
+                    <div class="photo-upload">
+                        <input type="file" id="teacherPhotoInput" accept="image/*" onchange="uploadPhoto('teacher')">
+                        <label for="teacherPhotoInput">📸 Upload Photo</label>
+                    </div>
+                </div>
+            `;
+            
+            await loadUserAttendance('teacher', currentUser.id, statsDiv, monthSelector, calendarDiv, summaryDiv);
+        }
+
+        // Load user attendance
+        async function loadUserAttendance(role, userId, statsDiv, monthSelectorDiv, calendarDiv, summaryDiv) {
+            const attendanceRef = ref(database, `attendance/${role}s/${userId}/years/${currentYear}`);
+            const snapshot = await get(attendanceRef);
+            
+            let totalDays = 0;
+            let presentDays = 0;
+            let monthlyData = {};
+            
+            if (snapshot.exists()) {
+                monthlyData = snapshot.val().monthly || {};
+                
+                // Calculate totals
+                Object.values(monthlyData).forEach(month => {
+                    totalDays += month.totalDays || 0;
+                    presentDays += month.presentDays || 0;
+                });
+            }
+            
+            const overallPercentage = totalDays > 0 ? Math.round((presentDays / totalDays) * 100) : 0;
+            
+            // Stats
+            statsDiv.innerHTML = `
+                <div class="stat-card">
+                    <h4>Total Days (${currentYear})</h4>
+                    <div class="stat-value">${totalDays}</div>
+                </div>
+                <div class="stat-card">
+                    <h4>Present Days</h4>
+                    <div class="stat-value">${presentDays}</div>
+                </div>
+                <div class="stat-card">
+                    <h4>Attendance %</h4>
+                    <div class="stat-value">${overallPercentage}%</div>
+                </div>
+            `;
+            
+            // Month selector
+            let monthHtml = '';
+            months.forEach((month, index) => {
+                const monthKey = String(index + 1).padStart(2, '0');
+                const monthData = monthlyData[monthKey] || { totalDays: 0, presentDays: 0 };
+                const monthPercentage = monthData.totalDays > 0 ? Math.round((monthData.presentDays / monthData.totalDays) * 100) : 0;
+                monthHtml += `<button class="month-btn ${index === currentMonth ? 'active' : ''}" onclick="showMonthCalendar('${role}', '${userId}', ${index})">
+                    ${month}<br><small>${monthPercentage}%</small>
+                </button>`;
+            });
+            monthSelectorDiv.innerHTML = monthHtml;
+            
+            // Show current month calendar
+            await showMonthCalendar(role, userId, currentMonth, calendarDiv, summaryDiv);
+        }
+
+        // Show month calendar
+        window.showMonthCalendar = async (role, userId, monthIndex, calendarDiv = null, summaryDiv = null) => {
+            currentMonth = monthIndex;
+            
+            if (!calendarDiv) {
+                calendarDiv = document.getElementById(`${role}Calendar`);
+                summaryDiv = document.getElementById(`${role}MonthlySummary`);
+            }
+            
+            // Update active month
+            document.querySelectorAll('.month-btn').forEach(btn => btn.classList.remove('active'));
+            if (event) event.target.classList.add('active');
+            
+            const monthKey = String(monthIndex + 1).padStart(2, '0');
+            
+            // Get attendance records for the month
+            const recordsRef = ref(database, `attendance/${role}s/${userId}/years/${currentYear}/monthly/${monthKey}/records`);
+            const snapshot = await get(recordsRef);
+            const records = snapshot.exists() ? snapshot.val() : {};
+            
+            // Generate calendar
+            const year = currentYear;
+            const month = monthIndex;
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            
+            let calendarHtml = '<div class="calendar-header">';
+            ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].forEach(day => {
+                calendarHtml += `<div>${day}</div>`;
+            });
+            calendarHtml += '</div><div class="calendar-grid">';
+            
+            // Empty cells for days before month start
+            for (let i = 0; i < firstDay; i++) {
+                calendarHtml += '<div class="calendar-day empty"></div>';
+            }
+            
+            // Fill in the days
+            for (let day = 1; day <= daysInMonth; day++) {
+                const date = `${year}-${monthKey}-${String(day).padStart(2, '0')}`;
+                const status = records[date];
+                
+                let dayClass = 'calendar-day';
+                let statusIcon = '';
+                
+                if (status === 'present') {
+                    dayClass += ' present';
+                    statusIcon = '✅';
+                } else if (status === 'absent') {
+                    dayClass += ' absent';
+                    statusIcon = '❌';
+                }
+                
+                calendarHtml += `<div class="${dayClass}" onclick="showDayDetails('${role}', '${userId}', '${date}')">
+                    <span class="date">${day}</span>
+                    <span class="status-icon">${statusIcon}</span>
+                </div>`;
+            }
+            
+            calendarHtml += '</div>';
+            calendarDiv.innerHTML = calendarHtml;
+            
+            // Load monthly summary
+            const monthDataRef = ref(database, `attendance/${role}s/${userId}/years/${currentYear}/monthly/${monthKey}`);
+            const monthSnapshot = await get(monthDataRef);
+            
+            if (monthSnapshot.exists()) {
+                const monthData = monthSnapshot.val();
+                const totalDays = monthData.totalDays || 0;
+                const presentDays = monthData.presentDays || 0;
+                const percentage = totalDays > 0 ? Math.round((presentDays / totalDays) * 100) : 0;
+                
+                // Get all dates with status
+                const records = monthData.records || {};
+                const presentDates = [];
+                const absentDates = [];
+                
+                Object.entries(records).forEach(([date, status]) => {
+                    const formattedDate = new Date(date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' });
+                    if (status === 'present') {
+                        presentDates.push(formattedDate);
+                    } else {
+                        absentDates.push(formattedDate);
+                    }
+                });
+                
+                summaryDiv.innerHTML = `
+                    <div class="summary-card">
+                        <h4>${months[monthIndex]} ${currentYear} - Education Toppers Hub</h4>
+                        <div class="summary-stats">
+                            <div class="summary-stat">
+                                <div class="label">Total Days</div>
+                                <div class="value">${totalDays}</div>
+                            </div>
+                            <div class="summary-stat">
+                                <div class="label">Present</div>
+                                <div class="value" style="color: var(--present);">${presentDays}</div>
+                            </div>
+                            <div class="summary-stat">
+                                <div class="label">Absent</div>
+                                <div class="value" style="color: var(--absent);">${totalDays - presentDays}</div>
+                            </div>
+                        </div>
+                        <div style="margin-top: 15px;">
+                            <div style="margin-bottom: 10px;"><strong>✅ Present Days (${presentDates.length}):</strong></div>
+                            <div style="display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 15px;">
+                                ${presentDates.map(date => `<span class="present-badge">${date}</span>`).join('') || 'No present days'}
+                            </div>
+                            <div style="margin-bottom: 10px;"><strong>❌ Absent Days (${absentDates.length}):</strong></div>
+                            <div style="display: flex; flex-wrap: wrap; gap: 5px;">
+                                ${absentDates.map(date => `<span class="absent-badge">${date}</span>`).join('') || 'No absent days'}
+                            </div>
+                        </div>
+                        <div class="percentage-bar" style="margin-top: 15px;">
+                            <div class="percentage-fill" style="width: ${percentage}%"></div>
+                        </div>
+                        <div class="percentage-text">Monthly Attendance: ${percentage}%</div>
+                    </div>
+                `;
+            } else {
+                summaryDiv.innerHTML = `
+                    <div class="summary-card">
+                        <h4>${months[monthIndex]} ${currentYear} - Education Toppers Hub</h4>
+                        <p>No attendance records for this month</p>
+                    </div>
+                `;
+            }
+        };
+
+        // Show day details
+        window.showDayDetails = (role, userId, date) => {
+            const modal = document.getElementById('detailModal');
+            const modalContent = document.getElementById('modalContent');
+            
+            const status = document.querySelector(`[onclick*="${date}"]`).classList.contains('present') ? 'present' : 'absent';
+            
+            modalContent.innerHTML = `
+                <h3>📅 Attendance Details - Education Toppers Hub</h3>
+                <div style="text-align: center; padding: 20px;">
+                    <p><strong>Date:</strong> ${new Date(date).toLocaleDateString('en-IN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p>
+                    <p><strong>Student/Teacher:</strong> ${currentUser?.fullName || 'Selected User'}</p>
+                    <p><strong>Class:</strong> ${currentUser?.class || 'N/A'}</p>
+                    <div style="margin: 30px 0;">
+                        ${status === 'present' ? 
+                            '<span class="present-badge" style="font-size: 24px; padding: 15px 30px;">✅ PRESENT</span>' : 
+                            '<span class="absent-badge" style="font-size: 24px; padding: 15px 30px;">❌ ABSENT</span>'}
+                    </div>
+                </div>
+            `;
+            
+            modal.classList.remove('hidden');
+        };
+
+        // Close modal
+        window.closeModal = () => {
+            document.getElementById('detailModal').classList.add('hidden');
+        };
+
+        // Close edit modal
+        window.closeEditModal = () => {
+            document.getElementById('editUserModal').classList.add('hidden');
+            editingUserId = null;
+        };
+
+        // Upload photo
+        window.uploadPhoto = async (role) => {
+            const input = document.getElementById(`${role}PhotoInput`);
+            const file = input.files[0];
+            
+            if (file) {
+                const reader = new FileReader();
+                reader.onloadend = async () => {
+                    const base64String = reader.result;
+                    
+                    const userRef = ref(database, `users/${currentUser.id}`);
+                    await update(userRef, { photo: base64String });
+                    
+                    currentUser.photo = base64String;
+                    // Update localStorage
+                    localStorage.setItem('educationToppersUser', JSON.stringify(currentUser));
+                    
+                    if (role === 'student') {
+                        loadStudentDashboard();
+                    } else {
+                        loadTeacherDashboard();
+                    }
+                    
+                    showToast('Photo uploaded successfully!', 'success');
+                };
+                reader.readAsDataURL(file);
+            }
+        };
+
+        // Admin Functions
+        window.showAdminSection = (section) => {
+            document.querySelectorAll('.admin-sidebar button').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            if (section === 'students') {
+                loadStudentsList();
+            } else if (section === 'teachers') {
+                loadTeachersList();
+            } else if (section === 'attendance') {
+                loadAttendanceManagement();
+            } else if (section === 'calendar') {
+                loadAdminCalendar();
+            } else if (section === 'reports') {
+                loadMonthlyReports();
+            } else if (section === 'blocked') {
+                loadBlockedUsers();
+            }
+        };
+
+        // Load students list
+        async function loadStudentsList() {
+            const content = document.getElementById('adminContent');
+            content.innerHTML = '<div class="spinner"></div>';
+            
+            const usersRef = ref(database, 'users');
+            const snapshot = await get(usersRef);
+            
+            let html = '<h3>👥 Manage Students - Education Toppers Hub (2026)</h3>';
+            
+            html += '<div class="filters">';
+            html += '<select id="classFilter" onchange="filterStudents()">';
+            html += '<option value="">All Classes</option>';
+            for(let i = 6; i <= 12; i++) {
+                html += `<option value="${i}">Class ${i}</option>`;
+            }
+            html += '</select>';
+            html += '<input type="text" id="searchStudent" placeholder="🔍 Search by name..." onkeyup="filterStudents()">';
+            html += '</div>';
+            
+            html += '<div class="table-container">';
+            html += '<table class="attendance-table" id="studentsTable">';
+            html += '<tr><th>Photo</th><th>Name</th><th>Email</th><th>Class</th><th>2026 %</th><th>Status</th><th>Actions</th></tr>';
+            
+            if (snapshot.exists()) {
+                const users = snapshot.val();
+                for (let id in users) {
+                    if (users[id].role === 'student') {
+                        const attendanceRef = ref(database, `attendance/students/${id}/years/2026`);
+                        const attendanceSnapshot = await get(attendanceRef);
+                        let percentage = 0;
+                        
+                        if (attendanceSnapshot.exists()) {
+                            const data = attendanceSnapshot.val();
+                            let totalDays = 0;
+                            let presentDays = 0;
+                            Object.values(data.monthly || {}).forEach(month => {
+                                totalDays += month.totalDays || 0;
+                                presentDays += month.presentDays || 0;
+                            });
+                            percentage = totalDays > 0 ? Math.round((presentDays / totalDays) * 100) : 0;
+                        }
+                        
+                        html += `<tr class="student-row" data-class="${users[id].class}" data-name="${users[id].fullName.toLowerCase()}">
+                            <td>
+                                ${users[id].photo ? 
+                                    `<img src="${users[id].photo}" style="width:40px; height:40px; border-radius:50%; object-fit:cover;">` : 
+                                    '📷'
+                                }
+                            </td>
+                            <td>${users[id].fullName}</td>
+                            <td>${users[id].email}</td>
+                            <td>Class ${users[id].class}</td>
+                            <td>
+                                <div class="percentage-bar">
+                                    <div class="percentage-fill" style="width: ${percentage}%"></div>
+                                </div>
+                                <div class="percentage-text">${percentage}%</div>
+                            </td>
+                            <td>${users[id].blocked ? '<span class="blocked-badge">Blocked</span>' : '<span class="present-badge">Active</span>'}</td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="view-btn" onclick="viewStudentDetails('${id}')" data-tooltip="View Details">👁️</button>
+                                    <button class="email-btn" onclick="editUserEmail('${id}', '${users[id].email}')" data-tooltip="Edit Email">📧</button>
+                                    <button class="password-btn" onclick="editUserPassword('${id}')" data-tooltip="Change Password">🔒</button>
+                                    <button class="edit-btn" onclick="editUser('${id}')" data-tooltip="Edit Name">✏️</button>
+                                    ${users[id].blocked ? 
+                                        `<button class="unblock-btn" onclick="toggleBlockUser('${id}', false)" data-tooltip="Unblock User">🔓</button>` : 
+                                        `<button class="block-btn" onclick="toggleBlockUser('${id}', true)" data-tooltip="Block User">🔒</button>`
+                                    }
+                                    <button class="delete-btn" onclick="deleteUser('${id}')" data-tooltip="Delete User">🗑️</button>
+                                </div>
+                            </td>
+                        </tr>`;
+                    }
+                }
+            }
+            
+            html += '</table></div>';
+            content.innerHTML = html;
+        }
+
+        // Edit user email
+        window.editUserEmail = (userId, currentEmail) => {
+            const newEmail = prompt('Enter new email address:', currentEmail);
+            if (newEmail && newEmail !== currentEmail) {
+                if (confirm('Are you sure you want to change this user\'s email?')) {
+                    updateUserEmail(userId, newEmail);
+                }
+            }
+        };
+
+        // Update user email
+        async function updateUserEmail(userId, newEmail) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(newEmail)) {
+                showToast('Please enter a valid email address', 'error');
+                return;
+            }
+
+            // Check if email already exists
+            const usersRef = ref(database, 'users');
+            const snapshot = await get(usersRef);
+            
+            if (snapshot.exists()) {
+                const users = snapshot.val();
+                for (let id in users) {
+                    if (users[id].email === newEmail && id !== userId) {
+                        showToast('Email already exists', 'error');
+                        return;
+                    }
+                }
+            }
+
+            const userRef = ref(database, `users/${userId}/email`);
+            await set(userRef, newEmail);
+            showToast('Email updated successfully!', 'success');
+            showAdminSection('students');
+        }
+
+        // Edit user password
+        window.editUserPassword = (userId) => {
+            const newPassword = prompt('Enter new password (min 6 characters):');
+            if (newPassword) {
+                if (newPassword.length < 6) {
+                    showToast('Password must be at least 6 characters', 'error');
+                    return;
+                }
+                if (confirm('Are you sure you want to change this user\'s password?')) {
+                    updateUserPassword(userId, newPassword);
+                }
+            }
+        };
+
+        // Update user password
+        async function updateUserPassword(userId, newPassword) {
+            const userRef = ref(database, `users/${userId}/password`);
+            await set(userRef, newPassword);
+            showToast('Password updated successfully!', 'success');
+            showAdminSection('students');
+        }
+
+        // Edit user (full name and class)
+        window.editUser = async (userId) => {
+            const userRef = ref(database, `users/${userId}`);
+            const snapshot = await get(userRef);
+            
+            if (snapshot.exists()) {
+                const user = snapshot.val();
+                editingUserId = userId;
+                
+                document.getElementById('editName').value = user.fullName || '';
+                document.getElementById('editEmail').value = user.email || '';
+                document.getElementById('editPassword').value = '';
+                document.getElementById('editClass').value = user.class || '6';
+                
+                document.getElementById('editUserModal').classList.remove('hidden');
+            }
+        };
+
+        // Save user edit
+        window.saveUserEdit = async () => {
+            if (!editingUserId) return;
+            
+            const newName = document.getElementById('editName').value;
+            const newEmail = document.getElementById('editEmail').value;
+            const newPassword = document.getElementById('editPassword').value;
+            const newClass = document.getElementById('editClass').value;
+            
+            if (!newName || !newEmail || !newClass) {
+                showToast('Please fill all required fields', 'error');
+                return;
+            }
+
+            // Validate email
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(newEmail)) {
+                showToast('Please enter a valid email address', 'error');
+                return;
+            }
+
+            // Check if email already exists (if changed)
+            const usersRef = ref(database, 'users');
+            const snapshot = await get(usersRef);
+            
+            if (snapshot.exists()) {
+                const users = snapshot.val();
+                for (let id in users) {
+                    if (users[id].email === newEmail && id !== editingUserId) {
+                        showToast('Email already exists', 'error');
+                        return;
+                    }
+                }
+            }
+
+            // Update user data
+            const updates = {
+                fullName: newName,
+                email: newEmail,
+                class: newClass
+            };
+
+            if (newPassword) {
+                if (newPassword.length < 6) {
+                    showToast('Password must be at least 6 characters', 'error');
+                    return;
+                }
+                updates.password = newPassword;
+            }
+
+            const userRef = ref(database, `users/${editingUserId}`);
+            await update(userRef, updates);
+            
+            showToast('User details updated successfully!', 'success');
+            closeEditModal();
+            showAdminSection('students');
+        };
+
+        // View student details
+        window.viewStudentDetails = async (userId) => {
+            const modal = document.getElementById('detailModal');
+            const modalContent = document.getElementById('modalContent');
+            
+            const userRef = ref(database, `users/${userId}`);
+            const userSnapshot = await get(userRef);
+            const user = userSnapshot.val();
+            
+            const attendanceRef = ref(database, `attendance/students/${userId}/years/2026`);
+            const attendanceSnapshot = await get(attendanceRef);
+            
+            let totalDays = 0;
+            let presentDays = 0;
+            let monthlySummary = '';
+            
+            if (attendanceSnapshot.exists()) {
+                const monthly = attendanceSnapshot.val().monthly || {};
+                
+                months.forEach((month, index) => {
+                    const monthKey = String(index + 1).padStart(2, '0');
+                    const monthData = monthly[monthKey] || { totalDays: 0, presentDays: 0 };
+                    totalDays += monthData.totalDays || 0;
+                    presentDays += monthData.presentDays || 0;
+                    
+                    const monthPercentage = monthData.totalDays > 0 ? Math.round((monthData.presentDays / monthData.totalDays) * 100) : 0;
+                    monthlySummary += `
+                        <tr>
+                            <td>${month} 2026</td>
+                            <td>${monthData.totalDays || 0}</td>
+                            <td>${monthData.presentDays || 0}</td>
+                            <td>${(monthData.totalDays - monthData.presentDays) || 0}</td>
+                            <td>
+                                <div class="percentage-bar">
+                                    <div class="percentage-fill" style="width: ${monthPercentage}%"></div>
+                                </div>
+                                <div class="percentage-text">${monthPercentage}%</div>
+                            </td>
+                        </tr>
+                    `;
+                });
+            }
+            
+            const overallPercentage = totalDays > 0 ? Math.round((presentDays / totalDays) * 100) : 0;
+            
+            modalContent.innerHTML = `
+                <h3>📋 Student Details - Education Toppers Hub</h3>
+                <div style="display: flex; gap: 20px; margin: 20px 0; flex-wrap: wrap;">
+                    <div class="profile-photo" style="width: 80px; height: 80px;">
+                        ${user.photo ? 
+                            `<img src="${user.photo}" alt="Profile">` : 
+                            '<div style="background:#ddd; width:100%; height:100%; display:flex; align-items:center; justify-content:center;">📷</div>'
+                        }
+                    </div>
+                    <div>
+                        <p><strong>Name:</strong> ${user.fullName}</p>
+                        <p><strong>Email:</strong> ${user.email}</p>
+                        <p><strong>Class:</strong> ${user.class}</p>
+                        <p><strong>Status:</strong> ${user.blocked ? '🚫 Blocked' : '✅ Active'}</p>
+                        <p><strong>Overall Attendance 2026:</strong> ${overallPercentage}% (${presentDays}/${totalDays})</p>
+                    </div>
+                </div>
+                
+                <h4>📊 Monthly Breakdown 2026</h4>
+                <div class="table-container">
+                    <table class="attendance-table">
+                        <tr>
+                            <th>Month</th>
+                            <th>Total Days</th>
+                            <th>Present</th>
+                            <th>Absent</th>
+                            <th>Percentage</th>
+                        </tr>
+                        ${monthlySummary}
+                    </table>
+                </div>
+            `;
+            
+            modal.classList.remove('hidden');
+        };
+
+        // Load teachers list
+        async function loadTeachersList() {
+            const content = document.getElementById('adminContent');
+            content.innerHTML = '<div class="spinner"></div>';
+            
+            const usersRef = ref(database, 'users');
+            const snapshot = await get(usersRef);
+            
+            let html = '<h3>👨‍🏫 Manage Teachers - Education Toppers Hub (2026)</h3>';
+            
+            html += '<div class="filters">';
+            html += '<select id="teacherClassFilter" onchange="filterTeachers()">';
+            html += '<option value="">All Classes</option>';
+            for(let i = 6; i <= 12; i++) {
+                html += `<option value="${i}">Class ${i}</option>`;
+            }
+            html += '</select>';
+            html += '<input type="text" id="searchTeacher" placeholder="🔍 Search by name..." onkeyup="filterTeachers()">';
+            html += '</div>';
+            
+            html += '<div class="table-container">';
+            html += '<table class="attendance-table" id="teachersTable">';
+            html += '<tr><th>Photo</th><th>Name</th><th>Email</th><th>Class</th><th>2026 %</th><th>Status</th><th>Actions</th></tr>';
+            
+            if (snapshot.exists()) {
+                const users = snapshot.val();
+                for (let id in users) {
+                    if (users[id].role === 'teacher') {
+                        const attendanceRef = ref(database, `attendance/teachers/${id}/years/2026`);
+                        const attendanceSnapshot = await get(attendanceRef);
+                        let percentage = 0;
+                        
+                        if (attendanceSnapshot.exists()) {
+                            const data = attendanceSnapshot.val();
+                            let totalDays = 0;
+                            let presentDays = 0;
+                            Object.values(data.monthly || {}).forEach(month => {
+                                totalDays += month.totalDays || 0;
+                                presentDays += month.presentDays || 0;
+                            });
+                            percentage = totalDays > 0 ? Math.round((presentDays / totalDays) * 100) : 0;
+                        }
+                        
+                        html += `<tr class="teacher-row" data-class="${users[id].class}" data-name="${users[id].fullName.toLowerCase()}">
+                            <td>
+                                ${users[id].photo ? 
+                                    `<img src="${users[id].photo}" style="width:40px; height:40px; border-radius:50%; object-fit:cover;">` : 
+                                    '📷'
+                                }
+                            </td>
+                            <td>${users[id].fullName}</td>
+                            <td>${users[id].email}</td>
+                            <td>Class ${users[id].class}</td>
+                            <td>
+                                <div class="percentage-bar">
+                                    <div class="percentage-fill" style="width: ${percentage}%"></div>
+                                </div>
+                                <div class="percentage-text">${percentage}%</div>
+                            </td>
+                            <td>${users[id].blocked ? '<span class="blocked-badge">Blocked</span>' : '<span class="present-badge">Active</span>'}</td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="view-btn" onclick="viewTeacherDetails('${id}')" data-tooltip="View Details">👁️</button>
+                                    <button class="email-btn" onclick="editUserEmail('${id}', '${users[id].email}')" data-tooltip="Edit Email">📧</button>
+                                    <button class="password-btn" onclick="editUserPassword('${id}')" data-tooltip="Change Password">🔒</button>
+                                    <button class="edit-btn" onclick="editUser('${id}')" data-tooltip="Edit Name">✏️</button>
+                                    ${users[id].blocked ? 
+                                        `<button class="unblock-btn" onclick="toggleBlockUser('${id}', false)" data-tooltip="Unblock User">🔓</button>` : 
+                                        `<button class="block-btn" onclick="toggleBlockUser('${id}', true)" data-tooltip="Block User">🔒</button>`
+                                    }
+                                    <button class="delete-btn" onclick="deleteUser('${id}')" data-tooltip="Delete User">🗑️</button>
+                                </div>
+                            </td>
+                        </tr>`;
+                    }
+                }
+            }
+            
+            html += '</table></div>';
+            content.innerHTML = html;
+        }
+
+        // Filter teachers
+        window.filterTeachers = () => {
+            const classFilter = document.getElementById('teacherClassFilter').value;
+            const searchText = document.getElementById('searchTeacher').value.toLowerCase();
+            const rows = document.querySelectorAll('.teacher-row');
+            
+            rows.forEach(row => {
+                const rowClass = row.dataset.class;
+                const rowName = row.dataset.name;
+                const classMatch = !classFilter || rowClass === classFilter;
+                const searchMatch = !searchText || rowName.includes(searchText);
+                
+                row.style.display = classMatch && searchMatch ? '' : 'none';
+            });
+        };
+
+        // View teacher details
+        window.viewTeacherDetails = async (userId) => {
+            const modal = document.getElementById('detailModal');
+            const modalContent = document.getElementById('modalContent');
+            
+            const userRef = ref(database, `users/${userId}`);
+            const userSnapshot = await get(userRef);
+            const user = userSnapshot.val();
+            
+            const attendanceRef = ref(database, `attendance/teachers/${userId}/years/2026`);
+            const attendanceSnapshot = await get(attendanceRef);
+            
+            let totalDays = 0;
+            let presentDays = 0;
+            let monthlySummary = '';
+            
+            if (attendanceSnapshot.exists()) {
+                const monthly = attendanceSnapshot.val().monthly || {};
+                
+                months.forEach((month, index) => {
+                    const monthKey = String(index + 1).padStart(2, '0');
+                    const monthData = monthly[monthKey] || { totalDays: 0, presentDays: 0 };
+                    totalDays += monthData.totalDays || 0;
+                    presentDays += monthData.presentDays || 0;
+                    
+                    const monthPercentage = monthData.totalDays > 0 ? Math.round((monthData.presentDays / monthData.totalDays) * 100) : 0;
+                    monthlySummary += `
+                        <tr>
+                            <td>${month} 2026</td>
+                            <td>${monthData.totalDays || 0}</td>
+                            <td>${monthData.presentDays || 0}</td>
+                            <td>${(monthData.totalDays - monthData.presentDays) || 0}</td>
+                            <td>
+                                <div class="percentage-bar">
+                                    <div class="percentage-fill" style="width: ${monthPercentage}%"></div>
+                                </div>
+                                <div class="percentage-text">${monthPercentage}%</div>
+                            </td>
+                        </tr>
+                    `;
+                });
+            }
+            
+            const overallPercentage = totalDays > 0 ? Math.round((presentDays / totalDays) * 100) : 0;
+            
+            modalContent.innerHTML = `
+                <h3>📋 Teacher Details - Education Toppers Hub</h3>
+                <div style="display: flex; gap: 20px; margin: 20px 0; flex-wrap: wrap;">
+                    <div class="profile-photo" style="width: 80px; height: 80px;">
+                        ${user.photo ? 
+                            `<img src="${user.photo}" alt="Profile">` : 
+                            '<div style="background:#ddd; width:100%; height:100%; display:flex; align-items:center; justify-content:center;">📷</div>'
+                        }
+                    </div>
+                    <div>
+                        <p><strong>Name:</strong> ${user.fullName}</p>
+                        <p><strong>Email:</strong> ${user.email}</p>
+                        <p><strong>Class:</strong> ${user.class}</p>
+                        <p><strong>Status:</strong> ${user.blocked ? '🚫 Blocked' : '✅ Active'}</p>
+                        <p><strong>Overall Attendance 2026:</strong> ${overallPercentage}% (${presentDays}/${totalDays})</p>
+                    </div>
+                </div>
+                
+                <h4>📊 Monthly Breakdown 2026</h4>
+                <div class="table-container">
+                    <table class="attendance-table">
+                        <tr>
+                            <th>Month</th>
+                            <th>Total Days</th>
+                            <th>Present</th>
+                            <th>Absent</th>
+                            <th>Percentage</th>
+                        </tr>
+                        ${monthlySummary}
+                    </table>
+                </div>
+            `;
+            
+            modal.classList.remove('hidden');
+        };
+
+        // Load blocked users
+        async function loadBlockedUsers() {
+            const content = document.getElementById('adminContent');
+            content.innerHTML = '<div class="spinner"></div>';
+            
+            const usersRef = ref(database, 'users');
+            const snapshot = await get(usersRef);
+            
+            let html = '<h3>🚫 Blocked Users - Education Toppers Hub</h3>';
+            
+            html += '<div class="table-container">';
+            html += '<table class="attendance-table">';
+            html += '<tr><th>Photo</th><th>Name</th><th>Email</th><th>Role</th><th>Class</th><th>Actions</th></tr>';
+            
+            if (snapshot.exists()) {
+                const users = snapshot.val();
+                for (let id in users) {
+                    if (users[id].blocked) {
+                        html += `<tr>
+                            <td>
+                                ${users[id].photo ? 
+                                    `<img src="${users[id].photo}" style="width:40px; height:40px; border-radius:50%; object-fit:cover;">` : 
+                                    '📷'
+                                }
+                            </td>
+                            <td>${users[id].fullName}</td>
+                            <td>${users[id].email}</td>
+                            <td>${users[id].role === 'student' ? '🎓 Student' : '👨‍🏫 Teacher'}</td>
+                            <td>Class ${users[id].class}</td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="unblock-btn" onclick="toggleBlockUser('${id}', false)">🔓 Unblock</button>
+                                    <button class="delete-btn" onclick="deleteUser('${id}')">🗑️ Delete</button>
+                                </div>
+                            </td>
+                        </tr>`;
+                    }
+                }
+            }
+            
+            html += '</table></div>';
+            content.innerHTML = html;
+        }
+
+        // Load admin calendar view
+        async function loadAdminCalendar() {
+            const content = document.getElementById('adminContent');
+            
+            let html = '<h3>📆 Attendance Calendar View - Education Toppers Hub (2026)</h3>';
+            
+            html += '<div class="filters">';
+            html += '<select id="calendarUserType">';
+            html += '<option value="student">👥 Students</option>';
+            html += '<option value="teacher">👨‍🏫 Teachers</option>';
+            html += '</select>';
+            
+            html += '<select id="calendarClass">';
+            html += '<option value="">All Classes</option>';
+            for(let i = 6; i <= 12; i++) {
+                html += `<option value="${i}">Class ${i}</option>`;
+            }
+            html += '</select>';
+            
+            html += '<select id="calendarMonth">';
+            months.forEach((month, index) => {
+                html += `<option value="${index}" ${index === new Date().getMonth() ? 'selected' : ''}>${month} 2026</option>`;
+            });
+            html += '</select>';
+            
+            html += '<button class="btn-success btn-sm" onclick="loadAdminCalendarView()">📅 Load Calendar</button>';
+            html += '</div>';
+            
+            html += '<div id="adminCalendarView" class="calendar-container"></div>';
+            html += '<div id="adminCalendarSummary"></div>';
+            
+            content.innerHTML = html;
+            
+            // Load default calendar
+            setTimeout(loadAdminCalendarView, 100);
+        }
+
+        // Load admin calendar view
+        window.loadAdminCalendarView = async () => {
+            const userType = document.getElementById('calendarUserType').value;
+            const classFilter = document.getElementById('calendarClass').value;
+            const monthIndex = parseInt(document.getElementById('calendarMonth').value);
+            const calendarDiv = document.getElementById('adminCalendarView');
+            const summaryDiv = document.getElementById('adminCalendarSummary');
+            
+            calendarDiv.innerHTML = '<div class="spinner"></div>';
+            
+            const usersRef = ref(database, 'users');
+            const snapshot = await get(usersRef);
+            
+            const monthKey = String(monthIndex + 1).padStart(2, '0');
+            const year = 2026;
+            const firstDay = new Date(year, monthIndex, 1).getDay();
+            const daysInMonth = new Date(year, monthIndex + 1, 0).getDate();
+            
+            let calendarHtml = '<div class="calendar-header">';
+            ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].forEach(day => {
+                calendarHtml += `<div>${day}</div>`;
+            });
+            calendarHtml += '</div><div class="calendar-grid">';
+            
+            // Empty cells
+            for (let i = 0; i < firstDay; i++) {
+                calendarHtml += '<div class="calendar-day empty"></div>';
+            }
+            
+            // Get all users attendance for this month
+            let allRecords = {};
+            let totalUsers = 0;
+            let presentCount = {};
+            
+            if (snapshot.exists()) {
+                const users = snapshot.val();
+                for (let id in users) {
+                    if (users[id].role === userType && !users[id].blocked && (!classFilter || users[id].class === classFilter)) {
+                        totalUsers++;
+                        
+                        const recordsRef = ref(database, `attendance/${userType}s/${id}/years/${year}/monthly/${monthKey}/records`);
+                        const recordsSnapshot = await get(recordsRef);
+                        
+                        if (recordsSnapshot.exists()) {
+                            const records = recordsSnapshot.val();
+                            Object.keys(records).forEach(date => {
+                                if (!presentCount[date]) presentCount[date] = { present: 0, total: 0 };
+                                presentCount[date].total++;
+                                if (records[date] === 'present') presentCount[date].present++;
+                            });
+                        }
+                    }
+                }
+            }
+            
+            // Fill calendar days
+            for (let day = 1; day <= daysInMonth; day++) {
+                const date = `${year}-${monthKey}-${String(day).padStart(2, '0')}`;
+                const stats = presentCount[date] || { present: 0, total: 0 };
+                const percentage = stats.total > 0 ? Math.round((stats.present / stats.total) * 100) : 0;
+                
+                let dayClass = 'calendar-day';
+                if (stats.total > 0) {
+                    if (percentage >= 75) dayClass += ' present';
+                    else if (percentage >= 50) dayClass += ' present';
+                    else dayClass += ' absent';
+                }
+                
+                calendarHtml += `<div class="${dayClass}" onclick="showDailyAttendance('${date}', '${userType}', '${classFilter}')">
+                    <span class="date">${day}</span>
+                    <span class="status-icon">${stats.present}/${stats.total}</span>
+                </div>`;
+            }
+            
+            calendarHtml += '</div>';
+            calendarDiv.innerHTML = calendarHtml;
+            
+            // Show summary
+            summaryDiv.innerHTML = `
+                <div class="summary-card">
+                    <h4>${months[monthIndex]} 2026 Summary - Education Toppers Hub</h4>
+                    <p><strong>Total ${userType === 'student' ? 'Students' : 'Teachers'}:</strong> ${totalUsers}</p>
+                    <p>Click on any day to see detailed attendance for that date.</p>
+                </div>
+            `;
+        };
+
+        // Show daily attendance
+        window.showDailyAttendance = async (date, userType, classFilter) => {
+            const modal = document.getElementById('detailModal');
+            const modalContent = document.getElementById('modalContent');
+            
+            const usersRef = ref(database, 'users');
+            const snapshot = await get(usersRef);
+            
+            let html = `<h3>📋 Attendance for ${new Date(date).toLocaleDateString('en-IN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</h3>`;
+            html += '<p><strong>Education Toppers Hub</strong></p>';
+            html += '<div class="table-container"><table class="attendance-table">';
+            html += '<tr><th>Name</th><th>Class</th><th>Status</th></tr>';
+            
+            let present = 0;
+            let absent = 0;
+            let total = 0;
+            
+            if (snapshot.exists()) {
+                const users = snapshot.val();
+                for (let id in users) {
+                    if (users[id].role === userType && !users[id].blocked && (!classFilter || users[id].class === classFilter)) {
+                        total++;
+                        
+                        const monthKey = date.substring(0, 7).replace('-', '-');
+                        const recordRef = ref(database, `attendance/${userType}s/${id}/years/2026/monthly/${monthKey}/records/${date}`);
+                        const recordSnapshot = await get(recordRef);
+                        const status = recordSnapshot.exists() ? recordSnapshot.val() : 'absent';
+                        
+                        if (status === 'present') present++;
+                        else absent++;
+                        
+                        html += `<tr>
+                            <td>${users[id].fullName}</td>
+                            <td>Class ${users[id].class}</td>
+                            <td><span class="${status === 'present' ? 'present-badge' : 'absent-badge'}">${status === 'present' ? '✅ Present' : '❌ Absent'}</span></td>
+                        </tr>`;
+                    }
+                }
+            }
+            
+            html += '</table></div>';
+            html += `
+                <div style="margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 5px;">
+                    <h4>Summary:</h4>
+                    <p>✅ Present: ${present}</p>
+                    <p>❌ Absent: ${absent}</p>
+                    <p>📊 Attendance %: ${total > 0 ? Math.round((present / total) * 100) : 0}%</p>
+                </div>
+            `;
+            
+            modalContent.innerHTML = html;
+            modal.classList.remove('hidden');
+        };
+
+        // Toggle block user
+        window.toggleBlockUser = async (userId, block) => {
+            const userRef = ref(database, `users/${userId}/blocked`);
+            await set(userRef, block);
+            
+            showToast(`User ${block ? 'blocked' : 'unblocked'} successfully!`, 'success');
+            showAdminSection('students');
+        };
+
+        // Filter students
+        window.filterStudents = () => {
+            const classFilter = document.getElementById('classFilter').value;
+            const searchText = document.getElementById('searchStudent').value.toLowerCase();
+            const rows = document.querySelectorAll('.student-row');
+            
+            rows.forEach(row => {
+                const rowClass = row.dataset.class;
+                const rowName = row.dataset.name;
+                const classMatch = !classFilter || rowClass === classFilter;
+                const searchMatch = !searchText || rowName.includes(searchText);
+                
+                row.style.display = classMatch && searchMatch ? '' : 'none';
+            });
+        };
+
+        // Load attendance management
+        async function loadAttendanceManagement() {
+            const content = document.getElementById('adminContent');
+            
+            let html = '<h3>📅 Mark Attendance - Education Toppers Hub (2026)</h3>';
+            
+            html += '<div class="filters">';
+            html += '<select id="attendanceUserType" onchange="loadAttendanceUsers()">';
+            html += '<option value="student">👥 Students</option>';
+            html += '<option value="teacher">👨‍🏫 Teachers</option>';
+            html += '</select>';
+            
+            html += '<select id="attendanceClassFilter" onchange="loadAttendanceUsers()">';
+            html += '<option value="">All Classes</option>';
+            for(let i = 6; i <= 12; i++) {
+                html += `<option value="${i}">Class ${i}</option>`;
+            }
+            html += '</select>';
+            
+            const today = new Date().toISOString().split('T')[0];
+            html += `<input type="date" id="attendanceDate" value="${today}" min="2026-01-01" max="2026-12-31">`;
+            
+            html += '<select id="attendanceMonth" onchange="loadAttendanceUsers()">';
+            months.forEach((month, index) => {
+                html += `<option value="${index}" ${index === new Date().getMonth() ? 'selected' : ''}>${month} 2026</option>`;
+            });
+            html += '</select>';
+            
+            html += '<button class="btn-success btn-sm" onclick="markBulkAttendance()">📝 Mark All Present</button>';
+            html += '</div>';
+            
+            html += '<div id="attendanceUsersList" class="table-container"></div>';
+            
+            content.innerHTML = html;
+            loadAttendanceUsers();
+        }
+
+        // Load attendance users
+        window.loadAttendanceUsers = async () => {
+            const userType = document.getElementById('attendanceUserType').value;
+            const classFilter = document.getElementById('attendanceClassFilter').value;
+            const date = document.getElementById('attendanceDate').value;
+            const monthIndex = document.getElementById('attendanceMonth').value;
+            const listDiv = document.getElementById('attendanceUsersList');
+            
+            listDiv.innerHTML = '<div class="spinner"></div>';
+            
+            const usersRef = ref(database, 'users');
+            const snapshot = await get(usersRef);
+            
+            const monthKey = String(parseInt(monthIndex) + 1).padStart(2, '0');
+            
+            let html = '<table class="attendance-table">';
+            html += '<tr><th>Name</th><th>Class</th><th>Status</th><th>Action</th></tr>';
+            
+            if (snapshot.exists()) {
+                const users = snapshot.val();
+                for (let id in users) {
+                    if (users[id].role === userType && !users[id].blocked && (!classFilter || users[id].class === classFilter)) {
+                        const recordRef = ref(database, `attendance/${userType}s/${id}/years/2026/monthly/${monthKey}/records/${date}`);
+                        const recordSnapshot = await get(recordRef);
+                        const currentStatus = recordSnapshot.exists() ? recordSnapshot.val() : '';
+                        
+                        html += `<tr>
+                            <td>${users[id].fullName}</td>
+                            <td>Class ${users[id].class}</td>
+                            <td>
+                                <select id="status_${id}" class="attendance-status">
+                                    <option value="">Select</option>
+                                    <option value="present" ${currentStatus === 'present' ? 'selected' : ''}>✅ Present</option>
+                                    <option value="absent" ${currentStatus === 'absent' ? 'selected' : ''}>❌ Absent</option>
+                                </select>
+                            </td>
+                            <td>
+                                <button class="btn-success btn-sm" onclick="markAttendance('${id}', '${userType}', '${date}', ${monthIndex})">💾 Save</button>
+                            </td>
+                        </tr>`;
+                    }
+                }
+            }
+            
+            html += '</table>';
+            listDiv.innerHTML = html;
+        };
+
+        // Mark bulk attendance
+        window.markBulkAttendance = async () => {
+            const userType = document.getElementById('attendanceUserType').value;
+            const classFilter = document.getElementById('attendanceClassFilter').value;
+            const date = document.getElementById('attendanceDate').value;
+            const monthIndex = document.getElementById('attendanceMonth').value;
+            
+            if (!confirm(`Mark all as present for ${date}?`)) return;
+            
+            const usersRef = ref(database, 'users');
+            const snapshot = await get(usersRef);
+            
+            if (snapshot.exists()) {
+                const users = snapshot.val();
+                for (let id in users) {
+                    if (users[id].role === userType && !users[id].blocked && (!classFilter || users[id].class === classFilter)) {
+                        await markAttendance(id, userType, date, monthIndex, 'present', true);
+                    }
+                }
+            }
+            
+            showToast('Bulk attendance marked successfully!', 'success');
+            loadAttendanceUsers();
+        };
+
+        // Mark attendance
+        window.markAttendance = async (userId, userType, date, monthIndex, status = null, bulk = false) => {
+            const selectedStatus = status || document.getElementById(`status_${userId}`).value;
+            
+            if (!selectedStatus && !bulk) {
+                showToast('Please select status', 'error');
+                return;
+            }
+            
+            const monthKey = String(parseInt(monthIndex) + 1).padStart(2, '0');
+            
+            // Save attendance record
+            const recordRef = ref(database, `attendance/${userType}s/${userId}/years/2026/monthly/${monthKey}/records/${date}`);
+            await set(recordRef, selectedStatus || 'present');
+            
+            // Update monthly stats
+            const monthlyRef = ref(database, `attendance/${userType}s/${userId}/years/2026/monthly/${monthKey}`);
+            const monthlySnapshot = await get(monthlyRef);
+            
+            let totalDays = 0;
+            let presentDays = 0;
+            
+            if (monthlySnapshot.exists()) {
+                const records = monthlySnapshot.val().records || {};
+                totalDays = Object.keys(records).length;
+                presentDays = Object.values(records).filter(s => s === 'present').length;
+            }
+            
+            await update(monthlyRef, {
+                totalDays,
+                presentDays,
+                percentage: totalDays > 0 ? Math.round((presentDays / totalDays) * 100) : 0
+            });
+            
+            // Update yearly stats
+            const yearlyRef = ref(database, `attendance/${userType}s/${userId}/years/2026`);
+            const yearlySnapshot = await get(yearlyRef);
+            
+            let yearlyTotal = 0;
+            let yearlyPresent = 0;
+            
+            if (yearlySnapshot.exists()) {
+                const monthly = yearlySnapshot.val().monthly || {};
+                Object.values(monthly).forEach(month => {
+                    yearlyTotal += month.totalDays || 0;
+                    yearlyPresent += month.presentDays || 0;
+                });
+            }
+            
+            await update(ref(database, `attendance/${userType}s/${userId}`), {
+                totalDays: yearlyTotal,
+                presentDays: yearlyPresent,
+                percentage: yearlyTotal > 0 ? Math.round((yearlyPresent / yearlyTotal) * 100) : 0
+            });
+            
+            if (!bulk) {
+                showToast('Attendance marked successfully!', 'success');
+                loadAttendanceUsers();
+            }
+        };
+
+        // Load monthly reports
+        async function loadMonthlyReports() {
+            const content = document.getElementById('adminContent');
+            
+            let html = '<h3>📊 Monthly Attendance Reports - Education Toppers Hub (2026)</h3>';
+            
+            html += '<div class="filters">';
+            html += '<select id="reportMonth">';
+            months.forEach((month, index) => {
+                html += `<option value="${index}" ${index === new Date().getMonth() ? 'selected' : ''}>${month} 2026</option>`;
+            });
+            html += '</select>';
+            
+            html += '<select id="reportClass">';
+            html += '<option value="">All Classes</option>';
+            for(let i = 6; i <= 12; i++) {
+                html += `<option value="${i}">Class ${i}</option>`;
+            }
+            html += '</select>';
+            
+            html += '<select id="reportUserType">';
+            html += '<option value="student">👥 Students</option>';
+            html += '<option value="teacher">👨‍🏫 Teachers</option>';
+            html += '</select>';
+            
+            html += '<button class="btn-success btn-sm" onclick="generateMonthlyReport()">📊 Generate Report</button>';
+            html += '</div>';
+            
+            html += '<div id="monthlyReportContent" class="table-container"></div>';
+            
+            content.innerHTML = html;
+        }
+
+        // Generate monthly report
+        window.generateMonthlyReport = async () => {
+            const monthIndex = document.getElementById('reportMonth').value;
+            const classFilter = document.getElementById('reportClass').value;
+            const userType = document.getElementById('reportUserType').value;
+            const reportDiv = document.getElementById('monthlyReportContent');
+            
+            reportDiv.innerHTML = '<div class="spinner"></div>';
+            
+            const usersRef = ref(database, 'users');
+            const snapshot = await get(usersRef);
+            
+            const monthKey = String(parseInt(monthIndex) + 1).padStart(2, '0');
+            const monthName = months[parseInt(monthIndex)];
+            
+            let html = `<h4>${monthName} 2026 - ${userType === 'student' ? 'Students' : 'Teachers'} Report</h4>`;
+            html += '<table class="attendance-table">';
+            html += '<tr><th>Name</th><th>Class</th><th>Present Days</th><th>Absent Days</th><th>Total Days</th><th>Percentage</th></tr>';
+            
+            if (snapshot.exists()) {
+                const users = snapshot.val();
+                for (let id in users) {
+                    if (users[id].role === userType && !users[id].blocked && (!classFilter || users[id].class === classFilter)) {
+                        const monthlyRef = ref(database, `attendance/${userType}s/${id}/years/2026/monthly/${monthKey}`);
+                        const monthlySnapshot = await get(monthlyRef);
+                        
+                        const totalDays = monthlySnapshot.exists() ? monthlySnapshot.val().totalDays || 0 : 0;
+                        const presentDays = monthlySnapshot.exists() ? monthlySnapshot.val().presentDays || 0 : 0;
+                        const absentDays = totalDays - presentDays;
+                        const percentage = totalDays > 0 ? Math.round((presentDays / totalDays) * 100) : 0;
+                        
+                        html += `<tr>
+                            <td>${users[id].fullName}</td>
+                            <td>Class ${users[id].class}</td>
+                            <td><span class="present-badge">${presentDays}</span></td>
+                            <td><span class="absent-badge">${absentDays}</span></td>
+                            <td>${totalDays}</td>
+                            <td>
+                                <div class="percentage-bar">
+                                    <div class="percentage-fill" style="width: ${percentage}%"></div>
+                                </div>
+                                <div class="percentage-text">${percentage}%</div>
+                            </td>
+                        </tr>`;
+                    }
+                }
+            }
+            
+            html += '</table>';
+            reportDiv.innerHTML = html;
+        };
+
+        // Delete user
+        window.deleteUser = async (userId) => {
+            if (confirm('Are you sure you want to delete this user? This action cannot be undone.')) {
+                const userRef = ref(database, `users/${userId}`);
+                await remove(userRef);
+                
+                const studentAttendanceRef = ref(database, `attendance/students/${userId}`);
+                await remove(studentAttendanceRef);
+                
+                const teacherAttendanceRef = ref(database, `attendance/teachers/${userId}`);
+                await remove(teacherAttendanceRef);
+                
+                showToast('User deleted successfully!', 'success');
+                showAdminSection('students');
+            }
+        };
+
+        // Logout
+        window.logout = () => {
+            // Clear localStorage
+            localStorage.removeItem('educationToppersUser');
+            currentUser = null;
+            document.getElementById('loginSection').classList.remove('hidden');
+            document.getElementById('studentDashboard').classList.add('hidden');
+            document.getElementById('teacherDashboard').classList.add('hidden');
+            document.getElementById('adminDashboard').classList.add('hidden');
+            
+            // Clear login fields
+            document.getElementById('email').value = '';
+            document.getElementById('password').value = '';
+            
+            showToast('Logged out successfully!', 'success');
+        };
+    </script>
+</body>
+</html>
